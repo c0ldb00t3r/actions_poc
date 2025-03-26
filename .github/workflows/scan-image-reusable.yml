@@ -26,7 +26,7 @@ jobs:
         with:
           egress-policy: audit 
 
-      - name: Scan image using Trivy   
+      - name: Scan image using Trivy composite actions   
         uses: ./.github/actions/trivyscan
         with:
           image-name: ${{ inputs.image-to-scan }}
