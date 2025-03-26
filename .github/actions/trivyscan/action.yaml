@@ -1,0 +1,32 @@
+# .github/actions/trivyscan/action.yml
+name: 'Run Trivy Scan'
+description: 'Scans a specified container image using Trivy'
+inputs:
+  image-name:
+    description: 'Full name of the image to scan (e.g., alpine:latest)'
+    required: true
+  severity:
+    description: 'Comma-separated list of severities to scan for (e.g., HIGH,CRITICAL)'
+    required: false
+    default: 'HIGH,CRITICAL'
+  exit-code:
+    description: 'Exit code for Trivy if vulnerabilities are found (0 = informational, 1 = fail step)'
+    required: false
+    default: '1' # Fail the step if specified severities are found
+  format:
+    description: 'Output format (e.g., table, json)'
+    required: false
+    default: 'table' # Table format is good for logs
+
+runs:
+  using: 'docker'
+  image: 'docker://aquasec/trivy:latest' # Use the official Trivy image
+  args:
+    - 'image'
+    - '--severity'
+    - ${{ inputs.severity }}
+    - '--exit-code'
+    - ${{ inputs.exit-code }}
+    - '--format'
+    - ${{ inputs.format }}
+    - ${{ inputs.image-name }}
