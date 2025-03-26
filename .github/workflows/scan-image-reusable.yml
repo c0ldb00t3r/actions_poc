@@ -1,0 +1,35 @@
+# .github/workflows/scan-image-reusable.yml
+name: Reusable Image Scan
+
+on:
+  workflow_call:
+    inputs:
+      image-to-scan:
+        description: 'The full image name:tag to be scanned'
+        required: true
+        type: string
+      fail-on-severity:
+        description: 'Scan severities that should cause the workflow to fail (e.g., HIGH,CRITICAL)'
+        required: false
+        type: string
+        default: 'HIGH,CRITICAL'
+
+jobs:
+  scan:
+    name: Scan Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+        with:
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+      - name: Scan image using Trivy
+        # Assumes the composite action is in the SAME repository
+        # If in another repo: uses: owner/repo/.github/actions/trivy-scan@ref
+        uses: ./.github/actions/trivy-scan
+        with:
+          image-name: ${{ inputs.image-to-scan }}
+          severity: ${{ inputs.fail-on-severity }}
+          exit-code: '1' # Always fail the job if vulns of specified severity found
+          format: 'table'
