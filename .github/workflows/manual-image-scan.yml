@@ -18,9 +18,7 @@ on:
 jobs:
   call_reusable_scanner:
     name: Trigger Image Scan
-    # Call the reusable workflow IN THE SAME REPOSITORY at the current ref (e.g., main branch)
-    # For production, use a specific tag or commit SHA instead of 'main' like '@v1.0' or '@sha...'
-    uses: ./.github/workflows/scan-image-reusable.yml@main
+    uses: ./.github/workflows/scan-image-reusable.yml
     with:
       image-to-scan: ${{ github.event.inputs.image_name }}
       fail-on-severity: ${{ github.event.inputs.severity_level }}
