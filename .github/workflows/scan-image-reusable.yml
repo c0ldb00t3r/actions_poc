@@ -22,11 +22,9 @@ jobs:
       - name: Harden Runner
         uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
         with:
-          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+          egress-policy: audit 
 
-      - name: Scan image using Trivy
-        # Assumes the composite action is in the SAME repository
-        # If in another repo: uses: owner/repo/.github/actions/trivy-scan@ref
+      - name: Scan image using Trivy   
         uses: ./.github/actions/trivy-scan
         with:
           image-name: ${{ inputs.image-to-scan }}
