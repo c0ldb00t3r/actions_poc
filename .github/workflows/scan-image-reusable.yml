@@ -25,7 +25,7 @@ jobs:
           egress-policy: audit 
 
       - name: Scan image using Trivy   
-        uses: ./.github/actions/trivy-scan
+        uses: ./.github/actions/trivyscan
         with:
           image-name: ${{ inputs.image-to-scan }}
           severity: ${{ inputs.fail-on-severity }}
